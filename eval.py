@@ -148,7 +148,7 @@ class GPTFastEvalWrapper(eval_wrapper):
         return logits
 
     def _model_generate(self, context, max_length, eos_token_id):
-        raise Exception('unimplemented')
+        raise NotImplementedError('_model_generate is not implemented')
 
 
 @torch.no_grad()
