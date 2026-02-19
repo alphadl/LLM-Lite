@@ -355,7 +355,6 @@ def main(
                 if len(buffer) == 4 or done_generating:
                     print(''.join(buffer), end='', flush=True)
                     buffer.clear()
-                # print(, end='', flush=True)
         else:
             callback = lambda x : x
         t0 = time.perf_counter()
