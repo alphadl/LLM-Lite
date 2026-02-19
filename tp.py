@@ -144,12 +144,11 @@ def _apply_tp_attn(attn: Attention) -> None:
         output[0], "sum", list(range(world_size))))
 
 
-def _apply_tp_Transformer(Transformer: Transformer) -> None:
-    # overwrite config before Transformer.setup_cache is called
+def _apply_tp_Transformer(model: Transformer) -> None:
     world_size = _get_world_size()
-    Transformer.config.n_head = Transformer.config.n_head // world_size
-    Transformer.config.dim = Transformer.config.dim // world_size
-    Transformer.config.n_local_heads = Transformer.config.n_local_heads // world_size
+    model.config.n_head = model.config.n_head // world_size
+    model.config.dim = model.config.dim // world_size
+    model.config.n_local_heads = model.config.n_local_heads // world_size
 
 
 def apply_tp(model: Transformer) -> None:
