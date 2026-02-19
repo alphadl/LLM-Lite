@@ -228,7 +228,7 @@ class RMSNorm(nn.Module):
 
 
 def precompute_freqs_cis(
-    seq_len: int, n_elem: int, base: int = 10000,
+    seq_len: int, n_elem: int, base: float = 10000.0,
     dtype: torch.dtype = torch.bfloat16
 ) -> Tensor:
     freqs = 1.0 / (base ** (torch.arange(0, n_elem, 2)[: (n_elem // 2)].float() / n_elem))
