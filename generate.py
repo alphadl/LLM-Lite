@@ -19,7 +19,7 @@ def device_sync(device):
     elif ("cpu" in device) or ("mps" in device):
         pass
     else:
-        print(f"device={device} is not yet suppported")
+        print(f"device={device} is not yet supported")
 
 
 torch._inductor.config.coordinate_descent_tuning = True
@@ -68,7 +68,7 @@ def decode_one_token(model: Transformer, x: torch.Tensor, input_pos: torch.Tenso
 def decode_n_tokens(model: Transformer, cur_token: torch.Tensor, input_pos: torch.Tensor, num_new_tokens: int, callback=lambda _: _, **sampling_kwargs):
     new_tokens, new_probs = [], []
     for i in range(num_new_tokens):
-        with torch.backends.cuda.sdp_kernel(enable_flash=False, enable_mem_efficient=False, enable_math=True): # Actually better for Inductor to codegen attention here
+        with torch.nn.attention.sdpa_kernel(torch.nn.attention.SDPBackend.MATH):
             next_token, next_prob = decode_one_token(
                 model, cur_token, input_pos, **sampling_kwargs
             )
@@ -317,7 +317,7 @@ def main(
             torch._inductor.config.triton.cudagraph_trees = False # Bug with cudagraph trees in this case
 
         if is_speculative:
-            global model_forward, logits_to_prob
+            global model_forward, logits_to_probs
             model_forward = torch.compile(model_forward, mode="reduce-overhead", fullgraph=True)
 
         global decode_one_token, prefill
@@ -407,7 +407,8 @@ def main(
         print(f"Mean Accepted: {sum([idx * i for idx, i in enumerate(counts_aggregated)])/sum(counts_aggregated)}")
 
     print(f"Average tokens/sec: {torch.mean(torch.tensor(aggregate_metrics['tokens_per_sec'])).item():.2f}")
-    print(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
+    if torch.cuda.is_available():
+        print(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
 
 
 if __name__ == '__main__':

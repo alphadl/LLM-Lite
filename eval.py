@@ -25,7 +25,7 @@ from model import Transformer
 try:
     import lm_eval
     lm_eval_available = True
-except:
+except ImportError:
     lm_eval_available = False
 
 from generate import _load_model, encode_tokens, model_forward
@@ -35,7 +35,7 @@ if lm_eval_available:
         from lm_eval.models.huggingface import HFLM as eval_wrapper
         from lm_eval.tasks import get_task_dict
         from lm_eval.evaluator import evaluate
-    except: #lm_eval version 0.3
+    except (ImportError, ModuleNotFoundError): # lm_eval version 0.3
         from lm_eval import base
         from lm_eval import tasks
         from lm_eval import evaluator
@@ -180,7 +180,7 @@ def eval(
 
     try:
         lm_eval.tasks.initialize_tasks()
-    except:
+    except Exception:
         pass
 
     if 'hendrycks_test' in tasks:
@@ -261,7 +261,7 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint_path', type=Path, default=Path("checkpoints/meta-llama/Llama-2-7b-chat-hf/lit_model.pth"), help='Model checkpoint path.')
     parser.add_argument('--compile', action='store_true', help='Whether to compile the model.')
     parser.add_argument('--tasks', nargs='+', type=str, default=["hellaswag"], help='list of lm-eluther tasks to evaluate usage: --tasks task1 task2')
-    parser.add_argument('--limit', type=int, default=None, help='number of samples to evalulate')
+    parser.add_argument('--limit', type=int, default=None, help='number of samples to evaluate')
     parser.add_argument('--max_seq_length', type=int, default=None, help='maximum length sequence to evaluate')
 
     args = parser.parse_args()

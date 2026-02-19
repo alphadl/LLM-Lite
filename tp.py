@@ -16,7 +16,11 @@ else:
     funcol = None
 
 from model import Attention, FeedForward, Transformer
-from quantize import WeightOnlyInt4Linear
+
+try:
+    from quantize import WeightOnlyInt4Linear
+except ImportError:
+    WeightOnlyInt4Linear = None
 
 
 def _get_rank() -> int:
