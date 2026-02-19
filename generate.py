@@ -193,7 +193,7 @@ def generate(
             accept_counts[len(next_tokens) - 1] += 1
             num_added = min(T_new - input_pos - 1, len(next_tokens))
             seq[input_pos + 1 : input_pos + num_added + 1] = next_tokens[: num_added]
-            for i in next_tokens[: num_added,]:
+            for i in next_tokens[:num_added]:
                 callback(i)
             input_pos = input_pos + num_added
             next_token = next_tokens[-1]
