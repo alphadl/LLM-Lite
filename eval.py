@@ -260,7 +260,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--checkpoint_path', type=Path, default=Path("checkpoints/meta-llama/Llama-2-7b-chat-hf/lit_model.pth"), help='Model checkpoint path.')
     parser.add_argument('--compile', action='store_true', help='Whether to compile the model.')
-    parser.add_argument('--tasks', nargs='+', type=str, default=["hellaswag"], help='list of lm-eluther tasks to evaluate usage: --tasks task1 task2')
+    parser.add_argument('--tasks', nargs='+', type=str, default=["hellaswag"], help='list of lm-evaluation-harness tasks to evaluate, usage: --tasks task1 task2')
     parser.add_argument('--limit', type=int, default=None, help='number of samples to evaluate')
     parser.add_argument('--max_seq_length', type=int, default=None, help='maximum length sequence to evaluate')
 
