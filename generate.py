@@ -3,6 +3,7 @@
 
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
+import contextlib
 import itertools
 import sys
 import time
@@ -358,7 +359,6 @@ def main(
         else:
             callback = lambda x : x
         t0 = time.perf_counter()
-        import contextlib
         if (i != num_samples - 1 or not profile) or (use_tp and rank != 0):
             prof = contextlib.nullcontext()
         else:
